@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+      <!-- JQUERY -->
+      <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
+      <!-- BOOTSTRAP -->
+      <script defer src="bootstrap-5.2.0-beta1-dist/js/bootstrap.bundle.js"></script>
+      <link rel="stylesheet" href="bootstrap-5.2.0-beta1-dist/css/bootstrap.css">
+      <!-- JAVASCRIPT -->
+      <script src="./server.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">Navbar</a>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="documenti.html">Documenti</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="clienti.html">Clienti</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+  <!-- INSERISCI ELIMINA E FILTRA-->
+  <div style="margin-left: 20px;">
+      <button onclick="openModal()" class="btn btn-success"><img src="img/clipboard-plus.svg"><img>Inserisci</button>
+      <button class="btn btn-danger"><img src="img/clipboard-minus.svg"><img>Rimuovi</button>  
+  </div>
+
+
+  <!-- TABELLA CLIENTI -->
+
+  <table id="tabella-clienti" class="table">
+    <thead>
+      <tr>
+        <th scope="col">Codice Cliente</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Indirizzo</th>
+        <th scope="col">CAP</th>
+        <th scope="col">Luogo</th>
+        <th scope="col">Sigla</th>
+      </tr>
+    </thead>
+    <tbody id="body-tabella">
+
+    </tbody>
+  </table>
+  </body>
+</html>
+
+<!-- Modal -->
+<div class="modal fade" id="inserisciCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Inserisci Cliente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="nomeClienteForm" class="form-label">Nome cliente</label>
+            <input type="text" class="form-control" id="nomeClienteForm">
+          </div>
+          <div class="mb-3">
+            <label for="indirizzoClienteForm" class="form-label">Indirizzo</label>
+            <input type="text" class="form-control" id="indirizzoClienteForm">
+          </div>
+          <div class="mb-3">
+            <label for="capClienteForm" class="form-label">CAP</label>
+            <input type="text" class="form-control" id="capClienteForm">
+          </div>
+          <div class="mb-3">
+            <label for="luogoClienteForm" class="form-label">Luogo</label>
+            <input type="text" class="form-control" id="luogoClienteForm">
+          </div>
+          <div class="mb-3">
+            <label for="siglaClienteForm" class="form-label">Sigla</label>
+            <input type="text" class="form-control" id="siglaClienteForm">
+          </div>
+
+          <button id="submitInserisci" type="submit" onclick="inserisciCliente()" class="btn btn-primary">
+            Salva
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+  import { inserisciClienteDatabase } from "./server.js";
+
+  function stampaInfo() {
+    console.log($('#tabella-clienti'));
+  }
+
+  function openModal() {
+    $('#inserisciCliente').modal("show");
+  }
+
+  function inserisciCliente() {
+    inserisciClienteDatabase($('#nomeClienteForm'), $('#indirizzoClienteForm'), $('#capClienteForm'), $('#luogoClienteForm'), $('#siglaClienteForm'))
+  }
+
+</script>
