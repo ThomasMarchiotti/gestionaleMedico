@@ -3,13 +3,12 @@
   <head>
     <meta charset="UTF-8" />
       <!-- JQUERY -->
-      <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
       <!-- BOOTSTRAP -->
       <script defer src="bootstrap-5.2.0-beta1-dist/js/bootstrap.bundle.js"></script>
       <link rel="stylesheet" href="bootstrap-5.2.0-beta1-dist/css/bootstrap.css">
       <!-- JAVASCRIPT -->
-      <script src="./server.js"></script>
+      <script src = "./dao.js" ></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-light">
@@ -98,8 +97,6 @@
 
 <script>
 
-  import { inserisciClienteDatabase } from "./server.js";
-
   function stampaInfo() {
     console.log($('#tabella-clienti'));
   }
@@ -108,8 +105,35 @@
     $('#inserisciCliente').modal("show");
   }
 
-  function inserisciCliente() {
-    inserisciClienteDatabase($('#nomeClienteForm'), $('#indirizzoClienteForm'), $('#capClienteForm'), $('#luogoClienteForm'), $('#siglaClienteForm'))
+  recuperaTuttiClienti();
+
+  function recuperaTuttiClienti() {
+    $.ajax('http://localhost:3000/listaclienti',
+      {
+        success: function(data, status, xhr) {
+
+          $.each(data, function(key, value) {
+
+            var codiceCliente = '<td>' + data[key]['codice_cliente'] + '</td>';
+            var nome = '<td>' + data[key]['nome'] + '</td>';
+            var via = '<td>' + data[key]['via'] + '</td>';
+            var cap = '<td>' + data[key]['cap'] + '</td>';
+            var luogo = '<td>' + data[key]['luogo'] + '</td>';
+            var siglaLuogo = '<td>' + data[key]['sigla_luogo'] + '</td>';
+
+            var riga = '<tr>' + codiceCliente + nome + via + cap + luogo + siglaLuogo + '</tr>';
+            $('#body-tabella').append(riga);
+
+            // console.log(data[key]['nome']);
+          });
+          
+        },
+
+        error: function() {
+          alert(data);
+        }
+      } 
+    )
   }
 
 </script>

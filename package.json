@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "name": "gestionale_medico",
   "version": "1.0.0",
   "description": "",
@@ -17,6 +16,7 @@
     "electron-rebuild": "^3.2.8"
   },
   "dependencies": {
+    "express": "^4.18.1",
     "sqlite3": "^5.0.9"
   }
 }
