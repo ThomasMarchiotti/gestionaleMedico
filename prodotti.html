@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+      <!-- JQUERY -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
+      <!-- BOOTSTRAP -->
+      <script defer src="bootstrap-5.2.0-beta1-dist/js/bootstrap.bundle.js"></script>
+      <link rel="stylesheet" href="bootstrap-5.2.0-beta1-dist/css/bootstrap.css">
+      <!-- JAVASCRIPT -->
+      <script src = "./dao_prodotti.js" ></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">Navbar</a>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="documenti.html">Documenti</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="clienti.html">Clienti</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="prodotti.html">Prodotti</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+  <!-- INSERISCI ELIMINA E FILTRA-->
+  <div class="d-flex">
+    <div class="p-2 flex-grow-1" style="margin-left: 20px;">
+        <button onclick="openModal()" class="btn btn-success"><img src="img/clipboard-plus.svg"><img>Inserisci</button>
+    </div>
+    <div class="p-2">
+      <input id="filtroProdotti" class="form-control mr-sm-2" type="search" placeholder="Cerca prodotti">
+    </div>
+  </div>
+
+    <!-- TABELLA CLIENTI -->
+
+    <table id="tabella-prodotti" class="table">
+      <thead>
+          <tr>
+            <th scope="col">Codice Prodotto</th>
+            <th scope="col">Descrizione</th>
+            <th scope="col">Quantit&agrave;</th>
+            <th scope="col">Scadenza</th>
+            <th scope="col">Actions</th>
+          </tr>
+      </thead>
+      <tbody id="body-tabella" style="overflow: scroll;">
+
+      </tbody>
+    </table>
+  </body>
+</html>
+
+
+<!-- Modal  INSERISCI CLIENTE -->
+<div class="modal fade" id="inserisciProdotto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Inserisci Prodotto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="codiceProdottoForm" class="form-label">Codice prodotto</label>
+            <input type="text" class="form-control" id="codiceProdottoForm">
+          </div>
+          <div class="mb-3">
+            <label for="descrizioneProdottoForm" class="form-label">Descrizione</label>
+            <input type="text" class="form-control" id="descrizioneProdottoForm">
+          </div>
+          <div class="mb-3">
+            <label for="quantitaProdottoForm" class="form-label">Quantit&agrave;</label>
+            <input type="text" class="form-control" id="quantitaProdottoForm">
+          </div>
+          <div class="mb-3">
+            <label for="scadenzaProdottoForm" class="form-label">Scadenza</label>
+            <input type="text" class="form-control" id="scadenzaProdottoForm">
+          </div>
+          <button id="submitInserisci" type="button" onclick="inserisciProdotto()" class="btn btn-primary">
+            Salva
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal  INSERISCI CLIENTE -->
+<div class="modal fade" id="modificaProdotto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modifica Prodotto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="codiceProdottoFormModifica" class="form-label">Codice prodotto</label>
+            <input type="text" class="form-control" id="codiceProdottoFormModifica">
+          </div>
+          <div class="mb-3">
+            <label for="descrizioneProdottoFormModifica" class="form-label">Descrizione</label>
+            <input type="text" class="form-control" id="descrizioneProdottoFormModifica">
+          </div>
+          <div class="mb-3">
+            <label for="quantitaProdottoFormModifica" class="form-label">Quantit&agrave;</label>
+            <input type="text" class="form-control" id="quantitaProdottoFormModifica">
+          </div>
+          <div class="mb-3">
+            <label for="scadenzaProdottoFormModifica" class="form-label">Scadenza</label>
+            <input type="text" class="form-control" id="scadenzaProdottoFormModifica">
+          </div>
+          <button id="submitModifica" type="button" class="btn btn-primary">
+            Salva
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  function openModal() {
+    $('#inserisciProdotto').modal("show");
+  }
+
+  function inserisciProdotto() {
+    let codiceProdotto =  $('#codiceProdottoForm').val();
+    let descrizione =     $('#descrizioneProdottoForm').val();
+    let quantita =        $('#quantitaProdottoForm').val();
+    let scadenza =        $('#scadenzaProdottoForm').val();
+
+    $.ajax({
+      url: 'http://localhost:4000/inserisciProdotto',
+      type: 'POST',
+      data: {
+              codice :      codiceProdotto,
+              descrizione : descrizione,
+              quantita :    quantita,
+              scadenza :    scadenza
+            },
+      success: function(data) {
+        console.log("Inserimento avvenuto con successo!");
+      },
+      error: function(data) {
+        console.log("Errore nell'inserimento!");
+      }
+    });
+
+    $('#inserisciProdotto').modal('toggle');
+  }
+
+  $('#submitModifica').click( function() {
+    $.ajax({
+      url: 'http://localhost:4000/modificaProdotto',
+      type: 'POST',
+      data: {
+              id: $('#submitModifica').data('idprodotto'),
+              codice: $('#modificaProdotto #codiceProdottoFormModifica').val(),
+              descrizione: $('#modificaProdotto #descrizioneProdottoFormModifica').val(),
+              quantita: $('#modificaProdotto #quantitaProdottoFormModifica').val(),
+              scadenza: $('#modificaProdotto #scadenzaProdottoFormModifica').val()
+            },
+      success: function(data) {
+        console.log("Modifica avvenuta con successo!");
+      },
+      error: function(data) {
+        console.log("Errore nella modifica del cliente!");
+      }
+    });
+    $('#modificaProdotto').modal('toggle');
+  })
+
+
+  function modificaProdotto(id) {
+
+    $('#modificaProdotto #submitModifica').attr("data-idprodotto", id);
+    $('#modificaProdotto #codiceProdottoFormModifica').val($('#codiceProdotto_'+id).text());
+    $('#modificaProdotto #descrizioneProdottoFormModifica').val($('#descrizioneProdotto_'+id).text());
+    $('#modificaProdotto #quantitaProdottoFormModifica').val($('#quantitaProdotto_'+id).text());
+    $('#modificaProdotto #scadenzaProdottoFormModifica').val($('#scadenzaProdotto_'+id).text());
+    $('#modificaProdotto').modal("show");
+  }
+
+  function eliminaProdotto(id) {
+    $.ajax({
+      url: 'http://localhost:4000/eliminaProdotto',
+      type: 'POST',
+      data: { id : id },
+      success: function(data) {
+        console.log("Eliminazione avvenuta con successo!");
+        $('#idDatabase_'+id).remove();
+      },
+      error: function(data) {
+        console.log("Errore nella cancellazione del prodotto!");
+      }
+    });
+  }
+
+  recuperaTuttiProdotti();
+
+  function recuperaTuttiProdotti() {
+    $.ajax('http://localhost:4000/listaProdotti',
+      {
+        success: function(data, status, xhr) {
+
+          $.each(data, function(key, value) {
+
+            let modificaProdotto = '<td><button class="btn btn-warning"'+
+              ' onclick=modificaProdotto('+ data[key]['id'] +')>'+
+              '<img src="img/pencil.svg"></img></button>'+
+              '<button class="btn btn-danger" onclick="eliminaProdotto('+ data[key]['id'] +')">'+
+              '<img src="img/trash3-fill.svg"></img></button></td>';
+
+
+            let codiceProdotto = '<td  id=codiceProdotto_' +data[key]['id'] + '>' + data[key]['codice_prodotto'] + '</td>';
+            let descrizione = '<td id=descrizioneProdotto_'+ data[key]['id'] +'>' + data[key]['descrizione'] + '</td>';
+            let quantita = '<td id=quantitaProdotto_'+ data[key]['id'] +'>' + data[key]['quantita'] + '</td>';
+            let scadenza = '<td id=scadenzaProdotto_'+ data[key]['id'] +'>' + data[key]['scadenza'] + '</td>';
+
+            let riga = '<tr id=idDatabase_'+data[key]['id']+'>' + codiceProdotto + descrizione + quantita + scadenza + modificaProdotto + '</tr>';
+            $('#body-tabella').append(riga);
+          });
+        },
+        error: function(data) {
+          alert(data);
+        }
+      }
+    )
+  }
+
+  $(document).ready(function() {
+    $('#filtroProdotti').on('keyup', function() {
+      var value = $(this).val().toLowerCase();
+      $('#tabella-prodotti tr').filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+
+</script>

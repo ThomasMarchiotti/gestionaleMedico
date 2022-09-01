@@ -8,7 +8,7 @@
       <script defer src="bootstrap-5.2.0-beta1-dist/js/bootstrap.bundle.js"></script>
       <link rel="stylesheet" href="bootstrap-5.2.0-beta1-dist/css/bootstrap.css">
       <!-- JAVASCRIPT -->
-      <script src = "./dao.js" ></script>
+      <script src = "./dao_clienti.js" ></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-light">
@@ -22,16 +22,24 @@
             <li class="nav-item">
               <a class="nav-link" href="clienti.html">Clienti</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="prodotti.html">Prodotti</a>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
 
   <!-- INSERISCI ELIMINA E FILTRA-->
-  <div style="margin-left: 20px;">
-      <button onclick="openModal()" class="btn btn-success"><img src="img/clipboard-plus.svg"><img>Inserisci</button>
-      <button class="btn btn-danger"><img src="img/clipboard-minus.svg"><img>Rimuovi</button>  
+  <div class="d-flex">
+    <div class="p-2 flex-grow-1" style="margin-left: 20px;">
+        <button onclick="openModal()" class="btn btn-success"><img src="img/clipboard-plus.svg"><img>Inserisci</button>
+    </div>
+    <div class="p-2">
+      <input id="filtroClienti" class="form-control mr-sm-2" type="search" placeholder="Cerca clienti">
+    </div>
   </div>
+
 
 
   <!-- TABELLA CLIENTI -->
@@ -45,16 +53,17 @@
         <th scope="col">CAP</th>
         <th scope="col">Luogo</th>
         <th scope="col">Sigla</th>
+        <th scope="col">Actions</th>
       </tr>
     </thead>
-    <tbody id="body-tabella">
+    <tbody id="body-tabella" style="overflow: scroll;">
 
     </tbody>
   </table>
   </body>
 </html>
 
-<!-- Modal -->
+<!-- Modal  INSERISCI CLIENTE -->
 <div class="modal fade" id="inserisciCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -64,6 +73,10 @@
       </div>
       <div class="modal-body">
         <form>
+          <div class="mb-3">
+            <label for="codiceClienteForm" class="form-label">Codice cliente</label>
+            <input type="text" class="form-control" id="codiceClienteForm">
+          </div>
           <div class="mb-3">
             <label for="nomeClienteForm" class="form-label">Nome cliente</label>
             <input type="text" class="form-control" id="nomeClienteForm">
@@ -85,7 +98,7 @@
             <input type="text" class="form-control" id="siglaClienteForm">
           </div>
 
-          <button id="submitInserisci" type="submit" onclick="inserisciCliente()" class="btn btn-primary">
+          <button id="submitInserisci" type="button" onclick="inserisciCliente()" class="btn btn-primary">
             Salva
           </button>
         </form>
@@ -94,6 +107,49 @@
   </div>
 </div>
 
+<!-- Modal  MODIFICA CLIENTE -->
+<div class="modal fade" id="modificaCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modifica Cliente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="codiceClienteFormModifica" class="form-label">Codice cliente</label>
+            <input type="text" class="form-control" id="codiceClienteFormModifica">
+          </div>
+          <div class="mb-3">
+            <label for="nomeClienteFormModifica" class="form-label">Nome cliente</label>
+            <input type="text" class="form-control" id="nomeClienteFormModifica">
+          </div>
+          <div class="mb-3">
+            <label for="indirizzoClienteFormModifica" class="form-label">Indirizzo</label>
+            <input type="text" class="form-control" id="indirizzoClienteFormModifica">
+          </div>
+          <div class="mb-3">
+            <label for="capClienteFormModifica" class="form-label">CAP</label>
+            <input type="text" class="form-control" id="capClienteFormModifica">
+          </div>
+          <div class="mb-3">
+            <label for="luogoClienteFormModifica" class="form-label">Luogo</label>
+            <input type="text" class="form-control" id="luogoClienteFormModifica">
+          </div>
+          <div class="mb-3">
+            <label for="siglaClienteFormModifica" class="form-label">Sigla</label>
+            <input type="text" class="form-control" id="siglaClienteFormModifica">
+          </div>
+
+          <button id="submitModifica" type="button" class="btn btn-primary">
+            Salva
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 
@@ -105,6 +161,89 @@
     $('#inserisciCliente').modal("show");
   }
 
+  function inserisciCliente() {
+    var codiceCliente =     $('#codiceClienteForm').val();
+    var nomeCliente =       $('#nomeClienteForm').val();
+    var indirizzoCliente =  $('#indirizzoClienteForm').val();
+    var capCliente =        $('#capClienteForm').val();
+    var luogoCliente =      $('#luogoClienteForm').val();
+    var siglaCliente =      $('#siglaClienteForm').val();
+
+    $.ajax({
+      url: 'http://localhost:3000/inserisciCliente',
+      type: 'POST',
+      data: { 
+              codice :    codiceCliente,
+              nome :      nomeCliente,
+              indirizzo : indirizzoCliente,
+              cap :       capCliente,
+              luogo :     luogoCliente,
+              sigla :     siglaCliente
+            },
+      success: function(data) {
+        console.log("Inserimento avvenuto con successo!");
+      },
+      error: function(data) {
+        console.log("Errore nell'inserimento!");
+      }
+    });
+
+    $('#inserisciCliente').modal('toggle');
+  }
+
+
+  // function submitModifica(id) {
+  $('#submitModifica').click( function() {
+    $.ajax({
+      url: 'http://localhost:3000/modificaCliente',
+      type: 'post',
+      data: { 
+        id: $('#submitModifica').data('idcliente'),
+        codice: $('#modificaCliente #codiceClienteFormModifica').val(),
+        nome: $('#modificaCliente #nomeClienteFormModifica').val(),
+        indirizzo: $('#modificaCliente #indirizzoClienteFormModifica').val(),
+        cap: $('#modificaCliente #capClienteFormModifica').val(),
+        luogo: $('#modificaCliente #luogoClienteFormModifica').val(),
+        siglaLuogo: $('#modificaCliente #siglaClienteFormModifica').val()
+      },
+      success: function(data) {
+        console.log("Modifica avvenuta con successo!");
+      }, error: function(data) {
+        console.log("Errore nella modifica del cliente!");
+      }
+    });
+    $('#modificaCliente').modal('toggle');
+  })
+
+
+  function modificaCliente(id) {
+
+    $('#modificaCliente #submitModifica').attr("data-idcliente", id);
+    $('#modificaCliente #codiceClienteFormModifica').val($('#codiceCliente_'+id).text());
+    $('#modificaCliente #nomeClienteFormModifica').val($('#nomeCliente_'+id).text());
+    $('#modificaCliente #indirizzoClienteFormModifica').val($('#viaCliente_'+id).text());
+    $('#modificaCliente #capClienteFormModifica').val($('#capCliente_'+id).text());
+    $('#modificaCliente #luogoClienteFormModifica').val($('#luogoCliente_'+id).text());
+    $('#modificaCliente #siglaClienteFormModifica').val($('#siglaLuogoCliente_'+id).text());
+    $('#modificaCliente').modal("show");
+  }
+
+  function eliminaCliente(id) {
+    $.ajax({
+      url: 'http://localhost:3000/eliminaCliente',
+      type: 'post',
+      data: { id : id },
+      success: function(data) {
+        console.log("Eliminazione avvenuta con successo!");
+        $('#idDatabase_'+id).remove();
+      },
+      error: function(data) {
+        console.log("Errore nella cancellazione del cliente!");
+      }
+
+    });
+  }  
+
   recuperaTuttiClienti();
 
   function recuperaTuttiClienti() {
@@ -114,26 +253,38 @@
 
           $.each(data, function(key, value) {
 
-            var codiceCliente = '<td>' + data[key]['codice_cliente'] + '</td>';
-            var nome = '<td>' + data[key]['nome'] + '</td>';
-            var via = '<td>' + data[key]['via'] + '</td>';
-            var cap = '<td>' + data[key]['cap'] + '</td>';
-            var luogo = '<td>' + data[key]['luogo'] + '</td>';
-            var siglaLuogo = '<td>' + data[key]['sigla_luogo'] + '</td>';
+            var modificaCliente = '<td><button class="btn btn-warning"'+
+              ' onclick=modificaCliente('+ data[key]['id'] +')>'+
+              '<img src="img/pencil.svg"></img></button>'+
+              '<button class="btn btn-danger" onclick="eliminaCliente('+ data[key]['id'] +')">'+
+              '<img src="img/trash3-fill.svg"></img></button></td>';
 
-            var riga = '<tr>' + codiceCliente + nome + via + cap + luogo + siglaLuogo + '</tr>';
+
+            var codiceCliente = '<td  id=codiceCliente_' +data[key]['id'] + '>' + data[key]['codice_cliente'] + '</td>';
+            var nome = '<td id=nomeCliente_'+ data[key]['id'] +'>' + data[key]['nome'] + '</td>';
+            var via = '<td id=viaCliente_'+ data[key]['id'] +'>' + data[key]['via'] + '</td>';
+            var cap = '<td id=capCliente_'+ data[key]['id'] +'>' + data[key]['cap'] + '</td>';
+            var luogo = '<td id=luogoCliente_'+ data[key]['id'] +'>' + data[key]['luogo'] + '</td>';
+            var siglaLuogo = '<td id=siglaLuogoCliente_'+ data[key]['id'] +'>' + data[key]['sigla_luogo'] + '</td>';
+
+            var riga = '<tr id=idDatabase_'+data[key]['id']+'>' + codiceCliente + nome + via + cap + luogo + siglaLuogo + modificaCliente + '</tr>';
             $('#body-tabella').append(riga);
-
-            // console.log(data[key]['nome']);
           });
-          
         },
-
-        error: function() {
+        error: function(data) {
           alert(data);
         }
       } 
     )
   }
+
+  $(document).ready(function() {
+    $('#filtroClienti').on('keyup', function() {
+      var value = $(this).val().toLowerCase();
+      $('#tabella-clienti tr').filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
 
 </script>
