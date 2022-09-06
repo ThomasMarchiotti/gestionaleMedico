@@ -1,7 +1,19 @@
-const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
 
-var db = new sqlite3.Database('./database.db');
+//IMPORTANTISSIMO PER FAR FUNZIONARE IL DATABASE
+const path = require('path');
+process.env.NODE_ENV = 'production';
+const isBuild = process.env.NODE_ENV;
+const pathToDbFile = path.join(
+    isBuild ? __dirname : __static,
+    '../src/database.db',
+);
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+const express = require('express');
+
+const sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database(pathToDbFile);
+console.log(db);
 
 let app = express();
 let server = app.listen(4000);
