@@ -2,7 +2,8 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-
+      <!-- JQUERY -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
       <!-- BOOTSTRAP -->
       <script src="bootstrap-5.2.0-beta1-dist/js/bootstrap.bundle.js"></script>
       <link rel="stylesheet" href="bootstrap-5.2.0-beta1-dist/css/bootstrap.css">
@@ -29,6 +30,134 @@
       </div>
     </nav>
 
-    Documenti
+    <!-- INSERISCI ELIMINA E FILTRA-->
+  <div class="d-flex">
+    <div class="p-2 flex-grow-1" style="margin-left: 20px;">
+        <button onclick="openModal()" class="btn btn-success"><img src="img/clipboard-plus.svg"><img>Inserisci</button>
+    </div>
+    <div class="p-2">
+      <input id="filtroDocumenti" class="form-control mr-sm-2" type="search" placeholder="Cerca documenti">
+    </div>
+  </div>
+
+    <!-- TABELLA DOCUMENTO -->
+
+    <table id="tabella-documenti" class="table">
+      <thead>
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Numero Documento</th>
+            <th scope="col">Actions</th>
+          </tr>
+      </thead>
+      <tbody id="body-tabella" style="overflow: scroll;">
+
+      </tbody>
+    </table>
   </body>
 </html>
+
+<!-- Modal  INSERISCI DOCUMENTO -->
+<div class="modal fade" id="inserisciDocumento" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Inserisci Documento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="d-flex">
+            <div style="width: 100%;">
+              <div class="mb-3">
+                <label for="descrizioneProdottoForm" class="form-label">Data:</label>
+                <input type="text" class="form-control" id="descrizioneProdottoForm">
+              </div>
+              <div class="mb-3">
+                <label for="quantitaProdottoForm" class="form-label">Codice Cliente:</label>
+                <input type="text" class="form-control" id="quantitaProdottoForm">
+              </div>
+              <div class="mb-3">
+                <label for="quantitaProdottoForm" class="form-label">Causale Trasporto:</label>
+                <input type="text" class="form-control" id="quantitaProdottoForm">
+              </div>
+              <div class="mb-3">
+                <label for="quantitaProdottoForm" class="form-label">Tipo di Documento:</label>
+                <input type="text" class="form-control" id="quantitaProdottoForm">
+              </div>
+              <div class="mb-3">
+                <label for="quantitaProdottoForm" class="form-label">Numero documento:</label>
+                <input type="text" class="form-control" id="quantitaProdottoForm">
+              </div>
+            </div>
+            <div style="width: 100%;">
+              <div class="mb-3">
+                <label for="quantitaProdottoForm" class="form-label">Numero colli:</label>
+                <input type="text" class="form-control" id="quantitaProdottoForm">
+              </div>
+              <div class="mb-3">
+                <label for="quantitaProdottoForm" class="form-label">Peso:</label>
+                <input type="text" class="form-control" id="quantitaProdottoForm">
+              </div>
+              <div class="mb-3">
+                <label for="quantitaProdottoForm" class="form-label">Vettore:</label>
+                <input type="text" class="form-control" id="quantitaProdottoForm">
+              </div>
+              <div class="mb-3">
+                <label for="quantitaProdottoForm" class="form-label">Porto:</label>
+                <input type="text" class="form-control" id="quantitaProdottoForm">
+              </div>
+              <div class="mb-3">
+                <label for="quantitaProdottoForm" class="form-label">Note:</label>
+                <input type="text" class="form-control" id="quantitaProdottoForm">
+              </div>
+            </div>
+          </div>
+          <table>
+            <tr>
+              <th>Codice</th>
+              <th>Descrizione:</th>
+              <th>U.M.</th>
+              <th>Quantit&agrave;</th>
+              <th>U.M./pz</th>
+              <th>Totale pz.</th>
+              <th>Actions</th>
+            </tr>
+            <tr>
+              <td>
+                <input type="text">
+              </td>
+              <td>
+                <input type="text">
+              </td>
+              <td>
+                <input type="text">
+              </td>
+              <td>
+                <input type="text">
+              </td>
+              <td>
+                <input type="text">
+              </td>
+              <td>
+                <input type="text">
+              </td>
+              <td><button id="submitRiga" type="button" onclick="inserisciRigaProdotto()" class="btn btn-success"></button></td>
+            </tr>
+
+          </table>
+          <button id="submitInserisci" type="button" onclick="inserisciDocumento()" class="btn btn-primary">
+            Salva
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openModal() {
+    $('#inserisciDocumento').modal("show");
+  }
+</script>
